@@ -14,9 +14,12 @@ const POST_MUTATION = gql`
     }
 `
 
-function CreateLink() {
+const CreateLink = ({history}) => {
     const [link, setLink] = useState({description: '', url: ''});
-    const [postMutation, { data }] = useMutation(POST_MUTATION);
+    const [postMutation] = useMutation(
+        POST_MUTATION,
+        { onCompleted: () => history.push('/') }
+    );
 
     return (
         <div>
@@ -27,7 +30,7 @@ function CreateLink() {
                     onChange={e => {
                         let newDesc = e.target.value;
                         setLink(prevState => {
-                            return {...prevState, description: newDesc}; // Immutable. 
+                            return {...prevState, description: newDesc}; // Immutable updates. Create copy of object and update state with the copy! 
                         });
                     }}
                     type="text"
